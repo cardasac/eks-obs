@@ -22,7 +22,7 @@ jobs:
         with:
           python-version: ${{ env.PYTHON_VERSION }}
           cache: "poetry"
-      - run: poetry install --no-root --with dev,test
+      - run: poetry install --no-root --with dev
       # - name: Lint check
       #   run: make lint >> $GITHUB_STEP_SUMMARY
       # - name: Check format of the code
