@@ -1,0 +1,25 @@
+[tool.poetry]
+name = "eks-obs"
+version = "0.1.0"
+description = "Sample eks with observability"
+authors = ["Alexandru Constantin Cardas <33327716+cardasac@users.noreply.github.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.12"
+flask = "^3.0.3"
+prometheus-client = "^0.20.0"
+gunicorn = "^22.0.0"
+
+
+[tool.poetry.group.dev.dependencies]
+ruff = "^0.5.5"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.ruff]
+line-length = 79
+select = ["ALL"]
+src = ["app.py", "tests"]
