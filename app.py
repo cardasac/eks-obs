@@ -5,7 +5,8 @@ from __future__ import annotations
 import functools
 
 from flask import Flask, Response, jsonify, request
-from opentelemetry.instrumentation.flask import FlaskInstrumentor
+
+# from opentelemetry.instrumentation.flask import FlaskInstrumentor
 from prometheus_client import Counter, Summary, make_wsgi_app
 from werkzeug.exceptions import HTTPException
 from werkzeug.middleware.dispatcher import DispatcherMiddleware
@@ -45,21 +46,18 @@ def handle_exception(error: HTTPException) -> tuple[Response, int]:
 
 def create_app(app_config: dict | None = None) -> Flask:
     """Create and configure an instance of the Flask application."""
-    instrumentor = FlaskInstrumentor()
-
+    # instrumentor = FlaskInstrumentor()
     app = Flask(__name__)
 
-    app.config.from_prefixed_env()
-
     app.register_error_handler(HTTPException, handle_exception)
-
+    app.config.from_prefixed_env()
     app.config.from_mapping(app_config)
 
     app.wsgi_app = DispatcherMiddleware(
         app.wsgi_app,
         {"/metrics": make_wsgi_app()},
     )
-    instrumentor.instrument_app(app)
+    # instrumentor.instrument_app(app)
 
     return app
 
