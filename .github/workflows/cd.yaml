@@ -6,6 +6,9 @@ env:
 on:
   push:
     branches: ["main"]
+    paths:
+      - "tf/**"
+      - ".github/workflows/tf.yml"
     paths-ignore:
       - "README.md"
 
@@ -14,8 +17,33 @@ permissions:
   contents: read
 
 jobs:
+  tf-apply:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./tf
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: configure aws credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: arn:aws:iam::346424633902:role/github-role
+          role-session-name: github-session
+          aws-region: ${{ env.AWS_REGION }}
+      - uses: hashicorp/setup-terraform@v3
+      - name: Terraform init
+        run: |
+          terraform init
+      - name: Switch workspace
+        run: terraform workspace select production
+      - name: Terraform apply
+        run: |
+          terraform apply -auto-approve -input=false -var "region=${AWS_REGION}" -var "environment=production"
+
   build:
     runs-on: ubuntu-latest
+    needs: [tf-apply]
     steps:
       - uses: actions/checkout@v4
         with:
@@ -73,3 +101,29 @@ jobs:
           echo "output_image=${{ env.REGISTRY }}/${{ env.REPOSITORY }}:${{ env.IMAGE_TAG }}" >> "$GITHUB_OUTPUT"
           docker tag $REGISTRY/$REPOSITORY:$IMAGE_TAG $REGISTRY/$REPOSITORY:latest
           docker push $REGISTRY/$REPOSITORY:latest
+  tf-helm:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./kubernetes
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: configure aws credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: arn:aws:iam::346424633902:role/github-role
+          role-session-name: github-session
+          aws-region: ${{ env.AWS_REGION }}
+      - uses: hashicorp/setup-terraform@v3
+      - name: Terraform init
+        run: |
+          terraform init
+      - name: Switch workspace
+        run: terraform workspace select production
+      - name: Terraform apply
+        run: |
+          terraform apply -auto-approve -input=false -var "region=${AWS_REGION}" -var "environment=production" \
+          -var "externalservices_tempo_basicauth_password=${{ secrets.GRAFANA_API_KEY }}" \
+          -var "externalservices_loki_basicauth_password=${{ secrets.GRAFANA_API_KEY }}" \
+          -var "externalservices_prometheus_basicauth_password=${{ secrets.GRAFANA_API_KEY }}"

@@ -1,0 +1,43 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: eks-obs
+  labels:
+    name: eks-obs
+spec:
+  strategy:
+    type: RollingUpdate
+  selector:
+    matchLabels:
+      app: eks-obs
+  template:
+    metadata:
+      labels:
+        app: eks-obs
+    spec:
+      automountServiceAccountToken: false
+      containers:
+      - name: eks-obs
+        image: calexc/app:latest
+        imagePullPolicy: Always
+        env:
+          - name: OTEL_SERVICE_NAME
+            value: eks-obs
+          - name: OTEL_RESOURCE_ATTRIBUTES
+            value: deployment.environment=production
+          - name: OTEL_PYTHON_LOGGING_AUTO_INSTRUMENTATION_ENABLED
+            value: 'true'
+          - name: OTEL_LOGS_EXPORTER
+            value: otlp
+          - name: OTEL_EXPORTER_OTLP_ENDPOINT
+            value: http://grafana-k8s-monitoring-alloy.default.svc.cluster.local:4318
+        ports:
+          - containerPort: 8080
+        resources:
+          requests:
+              memory: "64Mi"
+              cpu: "250m"
+          limits:
+            memory: "128Mi"
+            cpu: "500m"
+      restartPolicy: Always

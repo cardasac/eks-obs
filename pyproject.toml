@@ -10,6 +10,8 @@ python = "^3.12"
 flask = "^3.0.3"
 prometheus-client = "^0.20.0"
 gunicorn = "^22.0.0"
+opentelemetry-instrumentation-flask = "^0.47b0"
+opentelemetry-distro = {extras = ["otlp"], version = "^0.47b0"}
 
 
 [tool.poetry.group.dev.dependencies]

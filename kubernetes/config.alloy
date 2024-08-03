@@ -1,0 +1,14 @@
+discovery.relabel "eks_obs" {
+    targets = discovery.kubernetes.services.targets
+    rule {
+        source_labels = ["__meta_kubernetes_service_name"]
+        regex = "eks-obs"
+        action = "keep"
+    }
+}
+
+prometheus.scrape "eks_obs" {
+    job_name   = "eks-obs"
+    targets    = discovery.relabel.eks_obs.output
+    forward_to = [prometheus.relabel.metrics_service.receiver]
+}
