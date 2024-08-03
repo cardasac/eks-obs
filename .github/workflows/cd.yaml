@@ -6,9 +6,6 @@ env:
 on:
   push:
     branches: ["main"]
-    paths:
-      - "tf/**"
-      - ".github/workflows/tf.yml"
     paths-ignore:
       - "README.md"
 
