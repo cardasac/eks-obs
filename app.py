@@ -9,7 +9,6 @@ from opentelemetry.instrumentation.flask import FlaskInstrumentor
 from prometheus_client import Counter, Summary, make_wsgi_app
 from werkzeug.exceptions import HTTPException
 from werkzeug.middleware.dispatcher import DispatcherMiddleware
-from werkzeug.middleware.proxy_fix import ProxyFix
 
 REQUESTS = Counter(
     "http_requests_total",
@@ -50,13 +49,6 @@ def create_app(app_config: dict | None = None) -> Flask:
 
     app = Flask(__name__)
 
-    app.wsgi_app = ProxyFix(
-        app.wsgi_app,
-        x_for=1,
-        x_proto=1,
-        x_host=1,
-        x_prefix=1,
-    )
     app.config.from_prefixed_env()
 
     app.register_error_handler(HTTPException, handle_exception)

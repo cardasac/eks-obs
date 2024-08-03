@@ -28,4 +28,4 @@ USER nonroot
 HEALTHCHECK --interval=5s --timeout=3s \
     CMD curl -f http://localhost:8080 || exit 1
 
-CMD ["poetry", "run", "gunicorn", "app:APP", "--workers", "4", "-c", "gunicorn.conf.py", "--bind", "0.0.0.0:8080"]
+CMD ["poetry", "run", "gunicorn", "app:APP", "--workers", "2", "--bind", "0.0.0.0:8080"]
