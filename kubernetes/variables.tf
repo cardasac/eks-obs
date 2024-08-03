@@ -35,7 +35,6 @@ variable "externalservices_loki_basicauth_username" {
 
 variable "externalservices_loki_basicauth_password" {
   type    = string
-  default = ""
 }
 
 variable "externalservices_tempo_host" {
