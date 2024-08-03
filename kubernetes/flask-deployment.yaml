@@ -18,7 +18,7 @@ spec:
       automountServiceAccountToken: false
       containers:
       - name: eks-obs
-        image: calexc/app:latest
+        image: 058264337640.dkr.ecr.eu-west-1.amazonaws.com/app:latest
         imagePullPolicy: Always
         env:
           - name: OTEL_SERVICE_NAME
