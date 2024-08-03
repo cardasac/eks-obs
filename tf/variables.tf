@@ -1,4 +1,4 @@
-variable "vpc_region" {
+variable "region" {
   type        = string
   description = "The AWS region to create resources in"
   default     = "eu-west-1"
