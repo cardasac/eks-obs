@@ -1,5 +1,9 @@
 # Tasks
 
+> As a side note, I tried adding OpenTel but I ran out of time.
+
+[Link to Demo](https://youtu.be/U8lrUQJXG88)
+
 ## 1 Create a simple application
 
 Using the language of your choice, create any kind of application that will run in Kubernetes.
