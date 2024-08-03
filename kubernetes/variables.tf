@@ -142,3 +142,8 @@ variable "workspace_iam_roles" {
 variable "environment" {
   type = string
 }
+
+variable "region" {
+  default = "eu-west-1"
+  type    = string
+}

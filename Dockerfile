@@ -16,7 +16,7 @@ ENV POETRY_HOME="/opt/poetry" \
 
 ENV PATH="$PATH:$POETRY_HOME/bin"
 
-RUN curl -sSL https://install.python-poetry.org | python - && poetry install
+RUN curl -sSL https://install.python-poetry.org | python - && poetry install --no-root
 
 FROM base AS serve
 WORKDIR /app
