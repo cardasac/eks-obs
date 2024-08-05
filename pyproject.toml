@@ -15,7 +15,7 @@ opentelemetry-distro = {extras = ["otlp"], version = "^0.47b0"}
 
 
 [tool.poetry.group.dev.dependencies]
-ruff = "^0.5.5"
+ruff = "^0.5.6"
 
 [build-system]
 requires = ["poetry-core"]
